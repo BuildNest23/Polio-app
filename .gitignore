@@ -1,0 +1,5 @@
+node_modules
+dist
+dist-team
+public/team-template.html
+*.log
