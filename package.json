@@ -1,0 +1,32 @@
+{
+  "name": "polio-app",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --config vite.incharge.config.ts --port=3000 --host=0.0.0.0",
+    "dev:team": "vite --config vite.team.config.ts --port=3001 --host=0.0.0.0",
+    "build:team": "vite build --config vite.team.config.ts",
+    "build:incharge": "vite build --config vite.incharge.config.ts",
+    "build": "npm run build:team && node scripts/copy-team.mjs && npm run build:incharge",
+    "preview": "vite preview --config vite.incharge.config.ts",
+    "clean": "rm -rf dist dist-team public/team-template.html",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "exceljs": "^4.4.0",
+    "lucide-react": "^0.546.0",
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0",
+    "vite-plugin-pwa": "^1.3.0",
+    "vite-plugin-singlefile": "^2.3.0"
+  }
+}
