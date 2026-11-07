@@ -157,12 +157,16 @@ if (typeof document !== 'undefined') {
 function fillCachedResults() {
   const sheet = getSheet(); if (!sheet) return;
   sheet.eachRow({ includeEmpty: false }, (row: any) => row.eachCell({ includeEmpty: false }, (cell: any) => {
-    const f = cell.formula; if (!f) return;
+    const f0 = cell.formula; if (!f0) return;
+    // MINUS(a,b) only exists in Google Sheets. Save it as a-b so real Excel also works (same answer).
+    const mm = String(f0).match(/^MINUS\(\s*([A-Z]+\d+)\s*,\s*([A-Z]+\d+)\s*\)$/i);
+    const f = mm ? mm[1].toUpperCase() + '-' + mm[2].toUpperCase() : f0;
     try {
       let res: any = evaluateFormula(sheet, f, 0);
       if (res === null || res === undefined || (typeof res === 'number' && !isFinite(res))) res = evalIncDec(sheet, f);
       if (res !== null && res !== undefined) cell.value = { formula: f, result: res };
-    } catch { /* ignore */ }
+      else if (mm) cell.value = { formula: f };
+    } catch { if (mm) { try { cell.value = { formula: f }; } catch { /* ignore */ } } }
   }));
 }
 export async function serializeWorkbook(): Promise<ArrayBuffer> {
