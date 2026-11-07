@@ -2,14 +2,13 @@ import { useRef, useState } from 'react';
 import type { Dict } from '../lib/i18n';
 import { imp, importAdd, importAddData, importLoadFiles, importRemove, importTarget } from '../lib/teamio';
 import { emit } from '../lib/state';
+import { Summary } from '../../shared/Summary';
 
 function Review({ i, t }: { i: number; t: Dict }) {
   const f = imp.files[i], d = f.d, T = f.T, hs: any[] = d.houses || [];
   const tg = importTarget(d);
-  const still = T.A - T.B - T.C;
   const when = d.sentAt ? new Date(d.sentAt).toLocaleString([], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
   const stat = !tg ? <span className="badge red">No row in F2A</span> : imp.done[d.team + '|' + d.day] ? <span className="badge ok">Added to F2A</span> : null;
-  const cards: [string, number, string][] = [['A', T.A, t.lA], ['B', T.B, t.lB], ['C', T.C, t.lC], ['D', T.D, t.lD], ['S', T.S, t.lS], ['O', T.O, t.lO]];
   const blocks: any[] = [];
   for (let s = 0; s < hs.length; s += 30) {
     const rows: any[] = []; let a = 0, b = 0, g = 0, fo = 0;
@@ -36,14 +35,7 @@ function Review({ i, t }: { i: number; t: Dict }) {
     <div className="review">
       <div className="row between"><b style={{ fontSize: 17 }}>{d.team} · {t.day} {d.day}</b><span className="small muted">{when}</span></div>
       {stat}{acts}
-      <div className="redcard"><span>{t.still}</span><b>{still}</b></div>
-      <div className="stats">{cards.map(([k, n, l]) => <div className="stat" key={k}><i>{k}</i><b>{n}</b><small>{l}</small></div>)}</div>
-      <div className="softrow"><span>{t.vacc}</span><b>{T.B + T.C + T.D + T.S + T.O}</b></div>
-      <div className="stats">
-        <div className="stat"><b>{T.mmpv}</b><small>{t.mmpVacc}</small></div>
-        <div className="stat"><b>{T.z}</b><small>{t.zero}</small></div>
-        <div className="stat"><b>{T.lock}</b><small>{t.locked}</small></div>
-      </div>
+      <Summary T={T} L={{ still: t.still, lA: t.lA, lB: t.lB, lC: t.lC, lD: t.lD, lS: t.lS, lO: t.lO, totalVacc: t.vacc, mmp: t.mmpRatio, zero: t.zero, locked: t.locked }} />
       {blocks}
       {(d.school || []).length > 0 && (
         <div className="card flat">{d.school.map((s: any, k: number) => <div className="listrow" key={k}><span>{s.name || t.lS}</span><b>{s.u5} / {s.vac}</b></div>)}</div>

@@ -14,7 +14,7 @@ export const I18N = {
     lA: 'Children in houses', lB: 'Vaccinated in houses', lC: 'Found on revisit', lD: 'Outside houses', lS: 'Schools', lO: 'Guest children',
     kidsTitle: 'Children count', kidsHint: 'Read only. Difference = Now − Previous.', team: 'Team', prev: 'Previous', now: 'Now', diff: 'Difference', allTeams: 'All teams',
     moreTitle: 'More', settings: 'Settings', language: 'Language', theme: 'Theme', light: 'Light', dark: 'Dark', startDate: 'Campaign start date',
-    codes: 'Team codes', codesHint: 'Changing a code updates it in every section.', backup: 'Download backup copy', changeFile: 'Change Excel file', wipe: 'Reset / wipe everything', wipeAsk: 'This deletes the Excel file, imports and all saved data on this phone. Download a backup first. Continue?', wipeAsk2: 'Last check: really delete everything?', wipeYes: 'Delete everything', file: 'File', back: 'Back',
+    codes: 'Team codes', codesHint: 'Changing a code updates it in every section.', backup: 'Download backup copy', changeFile: 'Change Excel file', mmpRatio: 'MMP (vaccinated / total)', wipe: 'Reset / wipe everything', wipeAsk: 'This deletes the Excel file, imports and all saved data on this phone. Download a backup first. Continue?', wipeAsk2: 'Last check: really delete everything?', wipeYes: 'Delete everything', file: 'File', back: 'Back',
   },
   ur: {
     app: 'پولیو انچارج', f2a: 'F2A', gen: 'ٹیم ایپ', imp: 'امپورٹ', kids: 'بچے', more: 'مزید',
@@ -30,7 +30,7 @@ export const I18N = {
     lA: 'گھروں میں بچے', lB: 'گھروں میں ویکسین شدہ', lC: 'دوبارہ دورے میں ملے', lD: 'گھروں سے باہر', lS: 'اسکول', lO: 'مہمان بچے',
     kidsTitle: 'بچوں کی گنتی', kidsHint: 'صرف دیکھنے کے لیے۔ فرق = موجودہ − پچھلی۔', team: 'ٹیم', prev: 'پچھلی', now: 'موجودہ', diff: 'فرق', allTeams: 'تمام ٹیمیں',
     moreTitle: 'مزید', settings: 'ترتیبات', language: 'زبان', theme: 'تھیم', light: 'روشن', dark: 'تاریک', startDate: 'مہم کی شروع کی تاریخ',
-    codes: 'ٹیم کوڈ', codesHint: 'کوڈ بدلنے سے ہر سیکشن میں بدل جاتا ہے۔', backup: 'بیک اپ کاپی ڈاؤن لوڈ کریں', changeFile: 'ایکسل فائل تبدیل کریں', wipe: 'سب کچھ ری سیٹ / صاف کریں', wipeAsk: 'اس سے ایکسل فائل، امپورٹ اور اس فون کا سارا ڈیٹا حذف ہو جائے گا۔ پہلے بیک اپ ڈاؤن لوڈ کریں۔ جاری رکھیں؟', wipeAsk2: 'آخری تصدیق: واقعی سب کچھ حذف کریں؟', wipeYes: 'سب حذف کریں', file: 'فائل', back: 'واپس',
+    codes: 'ٹیم کوڈ', codesHint: 'کوڈ بدلنے سے ہر سیکشن میں بدل جاتا ہے۔', backup: 'بیک اپ کاپی ڈاؤن لوڈ کریں', changeFile: 'ایکسل فائل تبدیل کریں', mmpRatio: 'MMP (ویکسین شدہ / کل)', wipe: 'سب کچھ ری سیٹ / صاف کریں', wipeAsk: 'اس سے ایکسل فائل، امپورٹ اور اس فون کا سارا ڈیٹا حذف ہو جائے گا۔ پہلے بیک اپ ڈاؤن لوڈ کریں۔ جاری رکھیں؟', wipeAsk2: 'آخری تصدیق: واقعی سب کچھ حذف کریں؟', wipeYes: 'سب حذف کریں', file: 'فائل', back: 'واپس',
   },
 };
 export type Dict = typeof I18N.en;

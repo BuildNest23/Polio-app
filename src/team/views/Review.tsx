@@ -1,18 +1,12 @@
 import type { ReactElement } from 'react';
 import { totals, type Config, type State } from '../model';
 import type { Dict } from '../i18n';
+import { Summary } from '../../shared/Summary';
 
 interface P { t: Dict; s: State; c: Config; set: (f: (s: State) => State) => void; send: () => void; copy: () => void }
 
 export function Review({ t, s, send, copy }: P) {
   const T = totals(s);
-  // letter = the cell name used on the paper sheet
-  const rows: [string, string, number, string?][] = [
-    ['A', t.lA, T.A], ['B', t.lB, T.B], ['C', t.lC, T.C], ['D', t.lD, T.D], ['S', t.lS, T.S], ['O', t.lO, T.O],
-    ['', t.totalVacc, T.totalVacc, t.vaccFormula],
-    ['', t.mmpKids, T.mmpKids, `${t.mmpOf}: ${T.mmpv}`],
-    ['', t.zero, T.z, `${t.lockedOf}: ${T.lock}`],
-  ];
   // tables of 30 houses, like the paper sheet; each ends with a Sum row
   const blocks: ReactElement[] = [];
   for (let st = 0; st < s.houses.length; st += 30) {
@@ -40,18 +34,7 @@ export function Review({ t, s, send, copy }: P) {
   }
   return (
     <>
-      <div className="redcard"><span>{t.still}</span><b>{T.still}</b></div>
-      <div className="card">
-        {rows.map(([k, l, n, sub], i) => (
-          <div key={i} className="listrow">
-            <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              {k ? <span className="cellname">{k}</span> : null}
-              <span>{l}{sub ? <small className="muted" style={{ display: 'block' }}>{sub}</small> : null}</span>
-            </span>
-            <b>{n}</b>
-          </div>
-        ))}
-      </div>
+      <Summary T={T} L={{ still: t.still, lA: t.lA, lB: t.lB, lC: t.lC, lD: t.lD, lS: t.lS, lO: t.lO, totalVacc: t.totalVacc, mmp: t.mmpRatio, zero: t.zero, locked: t.lockedH }} />
       {blocks}
       <button className="btn primary big block" onClick={send}>{t.send}</button>
       <button className="btn big block" onClick={copy}>{t.copy}</button>
