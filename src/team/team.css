@@ -60,7 +60,7 @@ html[data-theme='dark'] .team .toast{color:#04230f}
 
 /* two colours that alternate, plus a small pop, so a fast second save is clearly a new message */
 .team .toast.a{background:var(--ok);color:#fff}
-.team .toast.b{background:var(--pri);color:var(--onpri)}
+.team .toast.b{background:#e8820c;color:#2b1700}
 html[data-theme='dark'] .team .toast.a{color:#04230f}
 .team .toast{animation:pop .18s ease-out}
 @keyframes pop{from{transform:scale(.94);opacity:.4}to{transform:scale(1);opacity:1}}
