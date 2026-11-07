@@ -67,3 +67,9 @@ html[data-theme='dark'] .team .toast.a{color:#04230f}
 
 /* review: cell names + 30-house tables */
 .team .cellname{min-width:24px;height:24px;border-radius:8px;background:var(--pri-soft);color:var(--pri);font-weight:700;font-size:13px;display:inline-flex;align-items:center;justify-content:center}
+
+/* warning message (red) + fixed-height "missed" slot so buttons never jump */
+.team .toast.w{background:var(--red);color:#fff}
+html[data-theme='dark'] .team .toast.w{color:#fff}
+.team .missedtag{min-height:20px;display:flex;align-items:center}
+.team .missedtag .badge{background:var(--red-bg);color:var(--red)}

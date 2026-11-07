@@ -12,8 +12,18 @@ export function Entry({ t, s, set, finish }: P) {
   const savedCount = s.houses.filter((x) => x.done).length;
   const num = (k: 't' | 'v' | 'g', label: string) => (
     <div className="card">
-      <b>{label}</b>
-      <Stepper value={h[k]} label={label} editable onChange={(n) => set((x) => setNum(x, x.cur, k, n))} />
+      <div className="row" style={{ justifyContent: 'space-between' }}>
+        <b>{label}</b>
+        {/* always the same height: shows the missed count next to Vaccinated, so nothing below jumps */}
+        {k === 'v' && <span className="missedtag">{h.t > h.v ? <span className="badge">{t.missedWord}: {missed(h)}</span> : null}</span>}
+      </div>
+      <Stepper
+        value={h[k]} label={label} editable
+        onChange={(n) => {
+          if (k === 'v' && n > h.t) { toast(t.vaccMax, true); return; }
+          set((x) => setNum(x, x.cur, k, n));
+        }}
+      />
     </div>
   );
   function save() {
@@ -42,7 +52,6 @@ export function Entry({ t, s, set, finish }: P) {
           {num('t', t.total)}
           {num('v', t.vacc)}
           {num('g', t.guest)}
-          {h.t > h.v && <div className="notice red">{t.missedWord}: <b>{missed(h)}</b></div>}
         </>
       )}
 

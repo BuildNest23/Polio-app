@@ -8,9 +8,9 @@ const setAsk = (a: Ask | null) => { ask = a; askSubs.forEach((f) => f()); };
 export function confirmSheet(msg: string, yes: string, no: string, third?: string): Promise<'yes' | 'no' | 'third'> {
   return new Promise((res) => setAsk({ msg, yes, no, third, resolve: (v) => { setAsk(null); res(v); } }));
 }
-let toasts: { id: number; msg: string }[] = []; let tid = 1; const toastSubs = new Set<() => void>();
-export function toast(msg: string) {
-  const id = tid++; toasts = [{ id, msg }]; /* one at a time: new replaces old */ toastSubs.forEach((f) => f());
+let toasts: { id: number; msg: string; warn?: boolean }[] = []; let tid = 1; const toastSubs = new Set<() => void>();
+export function toast(msg: string, warn = false) {
+  const id = tid++; toasts = [{ id, msg, warn }]; /* one at a time: new replaces old */ toastSubs.forEach((f) => f());
   setTimeout(() => { toasts = toasts.filter((t) => t.id !== id); toastSubs.forEach((f) => f()); }, 3200);
 }
 export function Overlays() {
@@ -30,7 +30,7 @@ export function Overlays() {
           </div>
         </div>
       )}
-      <div className="toasts">{ts.map((t) => <div key={t.id} className={'toast ' + (t.id % 2 ? 'a' : 'b')}>{t.msg}</div>)}</div>
+      <div className="toasts">{ts.map((t) => <div key={t.id} className={'toast ' + (t.warn ? 'w' : t.id % 2 ? 'a' : 'b')}>{t.msg}</div>)}</div>
     </>
   );
 }

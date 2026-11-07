@@ -67,7 +67,7 @@ const put = (s: State, i: number, h: House): State => ({ ...s, houses: s.houses.
 export function setNum(s: State, i: number, k: 't' | 'v' | 'g', n: number): State {
   const h = { ...s.houses[i] }; h[k] = clamp(n, 0, MAX);
   if (k === 't' && h.v > h.t) h.v = h.t;
-  if (k === 'v' && h.v > h.t) h.t = h.v; // vaccinated more than total: raise total
+  if (k === 'v' && h.v > h.t) h.v = h.t; // vaccinated can never be more than total
   return put(s, i, h);
 }
 export function toggle(s: State, i: number, k: 'm' | 'l'): State {
