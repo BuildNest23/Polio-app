@@ -50,7 +50,7 @@ export function F2AView({ t }: { t: Dict }) {
         ) : null}
       </div>
       <div className="f2a-wrap" style={{ ['--cw' as any]: w + 'px', ['--fs' as any]: f + 'px' }}>
-        <table className="f2a">
+        <table className="f2a" key={section.key}>
           <thead>
             {rows.filter((r) => r.kind === 'header').map((r) => (
               <tr key={'h' + r.idx} className={r.idx === 0 ? 'h1r' : 'h2r'}>
