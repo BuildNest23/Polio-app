@@ -1,0 +1,48 @@
+import { useLang } from '../shared/prefs';
+
+const en = {
+  title: 'Polio Incharge', noFile: 'No file loaded',
+  f2a: 'F2A', gen: 'Team App', imp: 'Import', kids: 'Children', more: 'More',
+  welcomeTitle: 'Open your F2A file', welcomeText: 'Choose your Excel file, or create a blank template. Only the F2A sheet is edited.',
+  chooseFile: 'Choose Excel file', createTpl: 'Create blank template',
+  discard: 'Discard', changed: 'cell(s) changed', bulk: 'bulk changes pending', noChange: 'no changes yet',
+  lgEdit: 'Editable', lgCalc: 'Formula', lgChg: 'Changed', print: 'Print', download: 'Download Excel',
+  day: 'Day', catchDay: 'Catch Day', startNew: 'Start new campaign', nextNote: 'Next Camp: Visited by Team is grey (reference only). Targets carry over when you start a new campaign.',
+  teamApps: 'Team apps', teamHint: 'Pick a day, then share each team’s app.', share: 'Share', downloadOne: 'Download', downloadAll: 'Download all teams',
+  area: 'Area', uc: 'Union council', vaccinator: 'Vaccinator', edit: 'Edit details', done: 'Done', campaignId: 'Campaign ID',
+  importTitle: 'Import team data', loadFile: 'Load file', pasteHere: 'Paste copied text here', loadText: 'Load text', allDays: 'All days', all: 'All',
+  stillMissed: 'Still missed after revisit', remove: 'Remove', addF2a: 'Add to F2A', added: 'Added to F2A', noRow: 'No row in F2A for this team and day',
+  mismatch: 'Some files come from different campaigns.', nothing: 'No team files loaded yet.',
+  lA: 'Children in houses', lB: 'Vaccinated in houses', lC: 'Found on revisit', lD: 'Outside houses', lS: 'Schools', lO: 'Guest children',
+  totalVacc: 'Total vaccinated', mmpKids: 'MMP children', mmpVacc: 'MMP vaccinated', zero: '0/0 houses', locked: 'Locked houses', houses: 'Houses', schools: 'Schools',
+  hHouse: 'House', hTotal: 'Total', hVacc: 'Vacc', hGuest: 'Guest', hRevisit: 'Revisit', sum: 'Sum',
+  kidsTitle: 'Children count', kidsHint: 'Read only. Difference = Now − Previous.', cTeam: 'Team', cPrev: 'Previous', cNow: 'Now', cDiff: 'Difference', total: 'Total', allTeams: 'All teams',
+  moreTitle: 'More', language: 'Language', theme: 'Theme', light: 'Light', dark: 'Dark', startDate: 'Campaign start date',
+  teamCodes: 'Team codes', teamCodesHint: 'The new code is written in every section that lists teams.', reset: 'Reset to T-11…', back: 'Back',
+  dlExcel: 'Download updated Excel', backup: 'Download backup copy', changeFile: 'Change Excel file', startNewCamp: 'Start new campaign', newTpl: 'Create blank template',
+  cancel: 'Cancel', ok: 'OK',
+};
+const ur: typeof en = {
+  title: 'پولیو انچارج', noFile: 'کوئی فائل نہیں',
+  f2a: 'F2A', gen: 'ٹیم ایپ', imp: 'امپورٹ', kids: 'بچے', more: 'مزید',
+  welcomeTitle: 'اپنی F2A فائل کھولیں', welcomeText: 'اپنی ایکسل فائل منتخب کریں یا خالی ٹیمپلیٹ بنائیں۔ صرف F2A شیٹ میں تبدیلی ہوتی ہے۔',
+  chooseFile: 'ایکسل فائل منتخب کریں', createTpl: 'خالی ٹیمپلیٹ بنائیں',
+  discard: 'منسوخ', changed: 'خانے تبدیل', bulk: 'بڑی تبدیلیاں محفوظ ہونا باقی', noChange: 'ابھی کوئی تبدیلی نہیں',
+  lgEdit: 'قابل ترمیم', lgCalc: 'فارمولا', lgChg: 'تبدیل شدہ', print: 'پرنٹ', download: 'ایکسل ڈاؤن لوڈ',
+  day: 'دن', catchDay: 'کیچ اپ ڈے', startNew: 'نئی مہم شروع کریں', nextNote: 'اگلی مہم: "ٹیم کا دورہ" گرے ہے (صرف حوالہ)۔ نئی مہم شروع کرنے پر ہدف آگے آ جاتا ہے۔',
+  teamApps: 'ٹیم ایپس', teamHint: 'دن منتخب کریں، پھر ہر ٹیم کی ایپ بھیجیں۔', share: 'شیئر', downloadOne: 'ڈاؤن لوڈ', downloadAll: 'تمام ٹیمیں ڈاؤن لوڈ کریں',
+  area: 'علاقہ', uc: 'یونین کونسل', vaccinator: 'ویکسینیٹر', edit: 'تفصیل بدلیں', done: 'مکمل', campaignId: 'مہم کا نمبر',
+  importTitle: 'ٹیم ڈیٹا امپورٹ', loadFile: 'فائل لوڈ کریں', pasteHere: 'کاپی کیا ہوا ٹیکسٹ یہاں پیسٹ کریں', loadText: 'ٹیکسٹ لوڈ کریں', allDays: 'تمام دن', all: 'سب',
+  stillMissed: 'نظرثانی کے بعد بھی رہ جانے والے', remove: 'ہٹائیں', addF2a: 'F2A میں شامل کریں', added: 'F2A میں شامل ہو گیا', noRow: 'اس ٹیم اور دن کی F2A میں قطار نہیں ملی',
+  mismatch: 'کچھ فائلیں مختلف مہم کی ہیں۔', nothing: 'ابھی کوئی ٹیم فائل لوڈ نہیں ہوئی۔',
+  lA: 'گھروں میں بچے', lB: 'گھروں میں ویکسین شدہ', lC: 'دوبارہ دورے میں ملے', lD: 'گھروں سے باہر', lS: 'اسکول', lO: 'مہمان بچے',
+  totalVacc: 'کل ویکسین شدہ', mmpKids: 'MMP بچے', mmpVacc: 'MMP ویکسین شدہ', zero: '0/0 گھر', locked: 'مقفل گھر', houses: 'گھر', schools: 'اسکول',
+  hHouse: 'گھر', hTotal: 'کل', hVacc: 'ویکسین', hGuest: 'مہمان', hRevisit: 'دوبارہ', sum: 'میزان',
+  kidsTitle: 'بچوں کی گنتی', kidsHint: 'صرف دیکھنے کے لیے۔ فرق = موجودہ − پچھلی۔', cTeam: 'ٹیم', cPrev: 'پچھلی', cNow: 'موجودہ', cDiff: 'فرق', total: 'کل', allTeams: 'تمام ٹیمیں',
+  moreTitle: 'مزید', language: 'زبان', theme: 'تھیم', light: 'روشن', dark: 'تاریک', startDate: 'مہم کی ابتدائی تاریخ',
+  teamCodes: 'ٹیم کوڈ', teamCodesHint: 'نیا کوڈ ہر اس سیکشن میں لکھا جاتا ہے جس میں ٹیمیں ہیں۔', reset: 'T-11 پر واپس', back: 'واپس',
+  dlExcel: 'اپڈیٹ شدہ ایکسل ڈاؤن لوڈ کریں', backup: 'بیک اپ کاپی ڈاؤن لوڈ کریں', changeFile: 'ایکسل فائل تبدیل کریں', startNewCamp: 'نئی مہم شروع کریں', newTpl: 'خالی ٹیمپلیٹ بنائیں',
+  cancel: 'منسوخ', ok: 'ٹھیک ہے',
+};
+export type Strings = typeof en;
+export function useT(): Strings { const [l] = useLang(); return l === 'ur' ? ur : en; }

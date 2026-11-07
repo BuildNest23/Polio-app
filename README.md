@@ -22,27 +22,40 @@ polio-app/
 ├─ public/icons/             app icons
 ├─ .github/workflows/deploy.yml   builds both and publishes to GitHub Pages
 ├─ tests/
-│  ├─ engine.test.ts         checks every formula against Excel's stored results
+│  ├─ engine.test.ts         every formula in your real F2A vs Excel's stored result (470/470 match)
+│  ├─ layout.test.ts         section row map vs your file, team-file totals, config replace
 │  └─ f2a-sample.json        your real F2A sheet, exported
 └─ src/
    ├─ shared/
    │  ├─ theme.css           colours, buttons, cards, F2A table styles (light + dark)
    │  └─ prefs.ts            language + theme, remembered on the device
    ├─ incharge/
-   │  ├─ main.tsx            (stage 1 placeholder, replaced in stage 2)
-   │  └─ lib/
-   │     ├─ core.ts          F2A layout: groups per section, section map, column maps, Import map   [DONE]
-   │     └─ engine.ts        formula engine, display values, team-file totals                    [DONE, tested]
+   │  ├─ main.tsx, App.tsx   shell: top bar, 5 tabs (F2A | Team App | Import | Children | More), dialogs
+   │  ├─ strings.ts          English + Urdu text for the app
+   │  ├─ lib/
+   │  │  ├─ core.ts          F2A layout: groups per section, section map, column maps, Import map
+   │  │  ├─ engine.ts        formula engine, display values, team-file totals (no UI, tested)
+   │  │  ├─ state.ts         app state store, IndexedDB, toast/confirm/prompt
+   │  │  └─ workbook.ts      load/save/autosave, cell edit, team codes, new template, start new campaign,
+   │  │                      children data, team app generator, import "Add to F2A"
+   │  └─ views/
+   │     ├─ F2AView.tsx      THE FORM: all sections, merged headers, formulas, zoom, print, download
+   │     ├─ TeamsView.tsx    pick day, share/download each team's app (T-12_Day1.html)
+   │     ├─ ImportView.tsx   load team files / paste text, full review, Add to F2A, Remove
+   │     ├─ ChildrenView.tsx Previous / Now / Difference
+   │     ├─ MoreView.tsx     language, theme, start date, team codes, download, new template/campaign
+   │     ├─ Welcome.tsx      choose file / create template
+   │     └─ Dialogs.tsx      confirm / prompt / toasts
    └─ team/
       └─ main.tsx            (stage 1 placeholder, replaced in stage 3)
 ```
 
 ## Build stages
 
-1. **Done:** project, build setup, GitHub deploy, theme, F2A layout and formula engine. The engine matches all 470 formulas of your real file.
-2. **Next:** workbook load/save (ExcelJS), new template, start new campaign, autosave; screens: F2A form, Team App generator, Import, Children, More.
-3. **Then:** team app (Entry, Missed, Review, Settings).
-4. **Last:** test everything with your Excel, polish.
+1. **Done:** project, build setup, GitHub deploy, theme, F2A layout and formula engine.
+2. **Done (this zip):** workbook load/save, new template, new campaign, team codes, children, generator, import, and all incharge screens.
+3. **Next:** team app (Entry, Missed, Review, Settings, send/copy). Until then the Team App tab downloads a placeholder file.
+4. **Last:** compile and test everything with your Excel, polish.
 
 ## Run it
 
@@ -51,7 +64,7 @@ npm install
 npm run build        # builds team app, copies it, then builds the incharge app
 npm run dev          # incharge app on http://localhost:3000
 npm run dev:team     # team app on http://localhost:3001
-npx tsx tests/engine.test.ts    # formula check
+npx tsx tests/engine.test.ts && npx tsx tests/layout.test.ts   # logic checks
 ```
 
 On GitHub: push to `main`, then Settings -> Pages -> Source: **GitHub Actions**.
