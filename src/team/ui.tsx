@@ -10,7 +10,7 @@ export function confirmSheet(msg: string, yes: string, no: string, third?: strin
 }
 let toasts: { id: number; msg: string }[] = []; let tid = 1; const toastSubs = new Set<() => void>();
 export function toast(msg: string) {
-  const id = tid++; toasts = [...toasts, { id, msg }]; toastSubs.forEach((f) => f());
+  const id = tid++; toasts = [{ id, msg }]; /* one at a time: new replaces old */ toastSubs.forEach((f) => f());
   setTimeout(() => { toasts = toasts.filter((t) => t.id !== id); toastSubs.forEach((f) => f()); }, 3200);
 }
 export function Overlays() {
