@@ -3,28 +3,15 @@ import type { Dict } from '../lib/i18n';
 import { imp, importAdd, importAddData, importLoadFiles, importRemove, importTarget } from '../lib/teamio';
 import { emit } from '../lib/state';
 import { Summary } from '../../shared/Summary';
+import { HouseTables } from '../../shared/HouseTables';
 
 function Review({ i, t }: { i: number; t: Dict }) {
   const f = imp.files[i], d = f.d, T = f.T, hs: any[] = d.houses || [];
   const tg = importTarget(d);
   const when = d.sentAt ? new Date(d.sentAt).toLocaleString([], { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
   const stat = !tg ? <span className="badge red">No row in F2A</span> : imp.done[d.team + '|' + d.day] ? <span className="badge ok">Added to F2A</span> : null;
-  const blocks: any[] = [];
-  for (let s = 0; s < hs.length; s += 30) {
-    const rows: any[] = []; let a = 0, b = 0, g = 0, fo = 0;
-    for (let k = s; k < Math.min(s + 30, hs.length); k++) {
-      const h = hs[k]; if (!h) continue;
-      a += h[0]; b += h[1]; g += h[2]; fo += h[5] || 0;
-      rows.push(<tr key={k}><td><b>{k + 1}</b></td><td className="num">{h[0]}</td><td className="num">{h[1]}</td><td className="num">{h[2]}</td><td className="num">{h[5] || ''}</td><td><b style={{ color: 'var(--warn-ink)' }}>{h[3] ? 'L' : ''}{h[4] ? 'M' : ''}</b></td></tr>);
-    }
-    if (rows.length) blocks.push(
-      <div className="card flat" style={{ padding: 0, overflow: 'hidden' }} key={s}>
-        <table className="simple">
-          <thead><tr><th>#</th><th className="num">Total</th><th className="num">Vacc</th><th className="num">Guest</th><th className="num">Revisit</th><th /></tr></thead>
-          <tbody>{rows}<tr className="tot"><td>{s + 1}–{Math.min(s + 30, hs.length)}</td><td className="num">{a}</td><td className="num">{b}</td><td className="num">{g}</td><td className="num">{fo}</td><td /></tr></tbody>
-        </table>
-      </div>);
-  }
+  const rows = hs.map((h, k) => (h ? { n: k + 1, t: h[0], v: h[1], g: h[2], f: h[5] || 0, l: !!h[3], m: !!h[4] } : null)).filter(Boolean) as any[];
+  const L = { house: t.colHouse, total: t.colTotal, vacc: t.colVacc, guest: t.colGuest, revisit: t.colRevisit, sum: t.colSum, range: t.colRange, lock: 'L', mmp: 'MMP' };
   const acts = (
     <div className="row">
       <button className="btn grow danger" onClick={() => importRemove(i)}>{t.remove}</button>
@@ -36,7 +23,7 @@ function Review({ i, t }: { i: number; t: Dict }) {
       <div className="row between"><b style={{ fontSize: 17 }}>{d.team} · {t.day} {d.day}</b><span className="small muted">{when}</span></div>
       {stat}{acts}
       <Summary T={T} L={{ still: t.still, lA: t.lA, lB: t.lB, lC: t.lC, lD: t.lD, lS: t.lS, lO: t.lO, totalVacc: t.vacc, mmp: t.mmpRatio, zero: t.zero, locked: t.locked }} />
-      {blocks}
+      <HouseTables rows={rows} L={L} showRevisit />
       {(d.school || []).length > 0 && (
         <div className="card flat">{d.school.map((s: any, k: number) => <div className="listrow" key={k}><span>{s.name || t.lS}</span><b>{s.u5} / {s.vac}</b></div>)}</div>
       )}
