@@ -10,20 +10,28 @@ export async function loadGenStore() { try { const g = await idbGet('polioGen');
 const genKey = () => S.startDate || 'default';
 export const genCid = () => 'C-' + (S.startDate || String(S.fileName || '').replace(/\.xlsx$/i, ''));
 
-export function genInfo(code: string) {
+export function genInfo(code: string, day = 1) {
   const norm = (v: any) => String(v || '').replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+  const txt = (c: any) => String(cellDisplayValue(c) || '').trim();
   let area = '', vac = '', uc = '';
   try {
     const ws = S.workbook.worksheets.find((w: any) => norm(w.name) === norm(code));
-    if (ws) { area = String(cellDisplayValue(ws.getCell(6, 21)) || '').trim(); vac = String(cellDisplayValue(ws.getCell(6, 9)) || '').trim(); }
+    if (ws) {
+      // Area: column T, rows 6 / 9 / 12 (one per campaign day). Members: W6 and W10.
+      area = txt(ws.getCell(6 + 3 * (day - 1), 20));
+      vac = [txt(ws.getCell(6, 23)), txt(ws.getCell(10, 23))].filter(Boolean).join(', ');
+    }
     const ss = S.workbook.getWorksheet('SS');
     if (ss) { const p = String(cellDisplayValue(ss.getCell(3, 1)) || '').split(':'); uc = (p[1] || '').trim(); }
   } catch { /* ignore */ }
+  // Typed by the incharge in this app (kept only on this phone, never written into the Excel file).
   const o = (genStore[genKey()] || {})[code] || {};
-  return { area: o.area !== undefined ? o.area : area, uc: o.uc !== undefined ? o.uc : uc, vac: o.vac !== undefined ? o.vac : vac };
+  const ak = 'area' + day;
+  return { area: o[ak] !== undefined ? o[ak] : area, uc: o.uc !== undefined ? o.uc : uc, vac: o.vac !== undefined ? o.vac : vac };
 }
-export async function setGenField(code: string, k: 'area' | 'uc' | 'vac', v: string) {
-  const c = genKey(); genStore[c] = genStore[c] || {}; genStore[c][code] = genStore[c][code] || {}; genStore[c][code][k] = v;
+export async function setGenField(code: string, k: 'area' | 'uc' | 'vac', v: string, day = 1) {
+  const key = k === 'area' ? 'area' + day : k;
+  const c = genKey(); genStore[c] = genStore[c] || {}; genStore[c][code] = genStore[c][code] || {}; genStore[c][code][key] = v;
   try { await idbSet('polioGen', genStore); } catch { /* ignore */ }
   emit();
 }
@@ -35,7 +43,7 @@ async function fetchTemplate(): Promise<string> {
   return await r.text();
 }
 export async function genBuild(code: string, day: number): Promise<string> {
-  const i = genInfo(code);
+  const i = genInfo(code, day);
   const cfg = { campaignId: genCid(), team: code, day, area: i.area, uc: i.uc, vaccinator: i.vac, incharge: '' };
   const json = JSON.stringify(cfg).replace(/</g, '\\u003c');
   const tpl = await fetchTemplate();

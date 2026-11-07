@@ -26,7 +26,7 @@ export function Settings({ t, c }: { t: Dict; c: Config }) {
         <div className="listrow"><span>{t.day}</span><b>{c.day}</b></div>
         {c.area && <div className="listrow"><span>Area</span><b>{c.area}</b></div>}
         {c.uc && <div className="listrow"><span>UC</span><b>{c.uc}</b></div>}
-        {c.vaccinator && <div className="listrow"><span>Vaccinator</span><b>{c.vaccinator}</b></div>}
+        {c.vaccinator && <div className="listrow"><span>{t.members}</span><b>{c.vaccinator}</b></div>}
         <span className="muted">{t.about}</span>
       </div>
     </>

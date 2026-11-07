@@ -17,7 +17,7 @@ export function TeamsView({ t }: { t: Dict }) {
         {[1, 2, 3].map((d) => <button key={d} className={'chip' + (d === day ? ' on' : '')} onClick={() => setDay(d)}>{t.day} {d}</button>)}
       </div>
       {codes.map((code) => {
-        const i = genInfo(code);
+        const i = genInfo(code, day);
         const editing = open === code;
         return (
           <div className="card" key={code}>
@@ -34,8 +34,8 @@ export function TeamsView({ t }: { t: Dict }) {
               <button className="btn grow" style={{ minHeight: 40, fontSize: 13 }} onClick={() => setOpen(editing ? '' : code)}>{editing ? t.done : t.edit}</button>
             </div>
             {editing && (['area', 'uc', 'vac'] as const).map((k) => (
-              <label className="field" key={k}>{k === 'area' ? t.area : k === 'uc' ? t.uc : t.vaccinator}
-                <input className="input" defaultValue={i[k]} onChange={(e) => setGenField(code, k, e.target.value)} />
+              <label className="field" key={k + day}>{k === 'area' ? t.area : k === 'uc' ? t.uc : t.vaccinator}
+                <input className="input" defaultValue={i[k]} onChange={(e) => setGenField(code, k, e.target.value, day)} />
               </label>
             ))}
           </div>
