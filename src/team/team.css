@@ -56,7 +56,7 @@ html[data-theme='dark'] .team .toast{color:#04230f}
 
 /* toast sits on top of the header (same place as the team name) */
 .team .toasts{top:0;bottom:auto;left:0;right:0;gap:0;padding:calc(4px + env(safe-area-inset-top)) 8px 4px;height:calc(44px + env(safe-area-inset-top));justify-content:center}
-.team .toast{width:100%;max-width:none;height:100%;display:flex;align-items:center;justify-content:center;border-radius:10px;padding:0 10px;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:none}
+.team .toast{width:100%;max-width:none;height:100%;display:flex;align-items:center;justify-content:center;border-radius:10px;padding:0 10px;font-size:13px;line-height:1.2;text-align:center;white-space:normal;overflow:hidden;box-shadow:none}
 
 /* two colours that alternate, plus a small pop, so a fast second save is clearly a new message */
 .team .toast.a{background:var(--ok);color:#fff}
@@ -73,3 +73,5 @@ html[data-theme='dark'] .team .toast.a{color:#04230f}
 html[data-theme='dark'] .team .toast.w{color:#fff}
 .team .missedtag{min-height:20px;display:flex;align-items:center}
 .team .missedtag .badge{background:var(--red-bg);color:var(--red)}
+
+.team .toast.w{font-size:12px;font-weight:600}
