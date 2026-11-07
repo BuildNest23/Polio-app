@@ -94,6 +94,7 @@ export async function loadWorkbookFromBuffer(buffer: ArrayBuffer, name: string, 
     let k = parseInt((await uiPrompt('How many catch-up days (0, 1 or 2)?', '1', { title: 'File layout', yesText: 'OK' })) || '', 10);
     if (!(k >= 0 && k <= 2)) k = 1;
     params = { nTeams: n, nCatch: k };
+    saveTemplateParams(S.fileName, params);
   }
   applySectionMap(Number(params.nTeams), Number(params.nCatch) || 0);
   S.section = mainSections()[0]?.key || 'day1';
