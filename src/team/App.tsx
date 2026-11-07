@@ -54,7 +54,7 @@ export default function App() {
   }
 
   return (
-    <div className="app">
+    <div className="app team">
       <div className="topbar">
         <div className="logo" dir="ltr">{cfg.team}</div>
         <div className="tb-title"><b>{t.team} {cfg.team} · {t.day} {cfg.day}</b><small>{[cfg.area, cfg.uc].filter(Boolean).join(' · ')}</small></div>

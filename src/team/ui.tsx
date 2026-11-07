@@ -47,12 +47,11 @@ export function NumInput({ value, onChange, label, max = MAX }: { value: number;
 }
 /** [-] number [+]. editable=true lets the number be typed (Entry tab); false = buttons only (Missed tab). */
 export function Stepper({ value, onChange, label, max = MAX, editable = true, small = false }: { value: number; onChange: (n: number) => void; label: string; max?: number; editable?: boolean; small?: boolean }) {
-  const sz = small ? { width: 48, height: 48, fontSize: 24 } : undefined;
   return (
-    <div className="stepper">
-      <button className="sbtn" style={sz} aria-label="Minus" onClick={() => onChange(clamp(value - 1, 0, max))}>−</button>
+    <div className={'stepper' + (small ? ' small' : '')}>
+      <button className="sbtn" aria-label="Minus" onClick={() => onChange(clamp(value - 1, 0, max))}>−</button>
       {editable ? <NumInput value={value} onChange={onChange} label={label} max={max} /> : <div className="stepnum" style={{ flex: small ? 'none' : 1, minWidth: 40 }}>{value}</div>}
-      <button className="sbtn plus" style={sz} aria-label="Plus" onClick={() => onChange(clamp(value + 1, 0, max))}>+</button>
+      <button className="sbtn plus" aria-label="Plus" onClick={() => onChange(clamp(value + 1, 0, max))}>+</button>
     </div>
   );
 }
