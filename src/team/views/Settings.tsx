@@ -2,7 +2,7 @@ import { useLang, useTheme } from '../../shared/prefs';
 import type { Dict } from '../i18n';
 import type { Config } from '../model';
 
-export function Settings({ t, c }: { t: Dict; c: Config }) {
+export function Settings({ t, c, onWipe }: { t: Dict; c: Config; onWipe: () => void }) {
   const [lang, setLang] = useLang();
   const [theme, setTheme] = useTheme();
   return (
@@ -29,6 +29,7 @@ export function Settings({ t, c }: { t: Dict; c: Config }) {
         {c.vaccinator && <div className="listrow"><span>{t.members}</span><b>{c.vaccinator}</b></div>}
         <span className="muted">{t.about}</span>
       </div>
+      <button className="btn danger big block" onClick={onWipe}>{t.wipe}</button>
     </>
   );
 }

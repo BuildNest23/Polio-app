@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLang } from '../shared/prefs';
 import { Icon } from '../incharge/Icon';
 import { I18N } from './i18n';
-import { buildFile, currentHasData, load, readConfig, save, saveHere, totals, type State } from './model';
+import { buildFile, initial, currentHasData, load, readConfig, save, saveHere, totals, type State } from './model';
 import { confirmSheet, Overlays, toast } from './ui';
 import { Entry } from './views/Entry';
 import { Missed } from './views/Missed';
@@ -28,6 +28,11 @@ export default function App() {
     const r = await confirmSheet(t.includeAsk.replace('{n}', String(s.cur + 1)), t.include, t.skip);
     if (r === 'yes') { const n = saveHere(s); setS(n); return n; }
     return s;
+  }
+  async function wipe() {
+    if ((await confirmSheet(t.wipeAsk, t.wipeYes, t.cancel)) !== 'yes') return;
+    if ((await confirmSheet(t.wipeAsk2, t.wipeYes, t.cancel)) !== 'yes') return;
+    setS(initial()); setTab('entry'); toast(t.wipeDone);
   }
   async function finish() { await askCurrent(); setTab('review'); }
   const text = (st: State) => JSON.stringify(buildFile(cfg, st));
@@ -68,7 +73,7 @@ export default function App() {
         {tab === 'entry' && <Entry t={t} s={s} set={set} finish={finish} />}
         {tab === 'missed' && <Missed t={t} s={s} set={set} />}
         {tab === 'review' && <Review t={t} s={s} c={cfg} set={set} send={send} copy={copy} />}
-        {tab === 'settings' && <Settings t={t} c={cfg} />}
+        {tab === 'settings' && <Settings t={t} c={cfg} onWipe={wipe} />}
       </div>
       <nav className="tabbar">
         {TABS.map((id) => (
