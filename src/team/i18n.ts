@@ -27,3 +27,10 @@ export const I18N = {
   },
 };
 export type Dict = typeof I18N.en;
+
+/** Small Urdu text shown under/next to the main English labels when "اردو" is chosen in Settings. */
+export const UR = {
+  total: 'کل بچے (5 سال سے کم)', vacc: 'ویکسین شدہ', guest: 'مہمان بچے', outside: 'گھروں سے باہر ملنے والے بچے', school: 'اسکول / مدرسہ',
+  house: 'گھر', mmp: 'MMP گھر', locked: 'مقفل', revisit: 'دوبارہ دورے میں ملے',
+  A: 'گھروں میں بچے', B: 'ویکسین شدہ', C: 'دوبارہ ملے', D: 'گھروں سے باہر', S: 'اسکول', O: 'مہمان بچے',
+};

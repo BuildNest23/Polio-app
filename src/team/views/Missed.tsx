@@ -1,11 +1,11 @@
 import { missed, setFound, type State } from '../model';
-import type { Dict } from '../i18n';
-import { Stepper } from '../ui';
+import { UR, type Dict } from '../i18n';
+import { Stepper, Ur } from '../ui';
 
-interface P { t: Dict; s: State; set: (f: (s: State) => State) => void }
+interface P { t: Dict; ur: boolean; s: State; set: (f: (s: State) => State) => void }
 
 /** Saved houses that still have missed children. Numbers here use buttons only (not typed). */
-export function Missed({ t, s, set }: P) {
+export function Missed({ t, ur, s, set }: P) {
   const rows = s.houses.map((h, i) => ({ h, i })).filter(({ h }) => h.done && !h.l && missed(h) > 0);
   if (!rows.length) return <div className="card"><span className="muted">{t.noMissed}</span></div>;
   return (
@@ -16,7 +16,7 @@ export function Missed({ t, s, set }: P) {
             <b>{t.house} {i + 1}</b>
             <span className="badge">{t.missedWord}: {missed(h)}</span>
           </div>
-          <span className="muted">{t.foundRevisit}</span>
+          <span className="muted">{t.foundRevisit} <Ur on={ur}>{UR.revisit}</Ur></span>
           <Stepper value={h.f} label={t.foundRevisit} editable={false} max={missed(h)} onChange={(n) => set((x) => setFound(x, i, n))} />
         </div>
       ))}

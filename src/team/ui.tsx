@@ -57,3 +57,8 @@ export function Stepper({ value, onChange, label, max = MAX, editable = true, sm
 }
 export function useAutoFocus<T extends HTMLElement>() { const r = useRef<T>(null); useEffect(() => { r.current?.focus(); }, []); return r; }
 export const useBool = (init = false) => useState(init);
+
+/** Small Urdu text (only when Urdu is switched on). */
+export function Ur({ on, children }: { on: boolean; children: string }) {
+  return on ? <span className="urdu" lang="ur" dir="rtl">{children}</span> : null;
+}

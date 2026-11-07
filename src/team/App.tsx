@@ -15,7 +15,10 @@ const cfg = readConfig();
 
 export default function App() {
   const [lang] = useLang();
-  const t = I18N[lang];
+  const t = I18N.en;
+  const ur = lang === 'ur';
+  // The app stays English and left-to-right; Urdu is only small extra text.
+  useEffect(() => { document.documentElement.dir = 'ltr'; document.documentElement.lang = 'en'; }, [lang]);
   const [tab, setTab] = useState<Tab>('entry');
   const [s, setS] = useState<State>(() => load(cfg));
   useEffect(() => { save(cfg, s); }, [s]);
@@ -80,9 +83,9 @@ export default function App() {
         <div className="red"><small>{t.stillShort}</small><b>{T.still}</b></div>
       </div>
       <div className="content">
-        {tab === 'entry' && <Entry t={t} s={s} set={set} finish={finish} />}
-        {tab === 'missed' && <Missed t={t} s={s} set={set} />}
-        {tab === 'review' && <Review t={t} s={s} c={cfg} set={set} send={send} copy={copy} />}
+        {tab === 'entry' && <Entry t={t} ur={ur} s={s} set={set} finish={finish} />}
+        {tab === 'missed' && <Missed t={t} ur={ur} s={s} set={set} />}
+        {tab === 'review' && <Review t={t} ur={ur} s={s} c={cfg} set={set} send={send} copy={copy} />}
         {tab === 'settings' && <Settings t={t} c={cfg} onWipe={wipe} />}
       </div>
       <nav className="tabbar">

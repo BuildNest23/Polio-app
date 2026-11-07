@@ -5,12 +5,12 @@ export interface SumLabels {
 }
 export interface SumTotals { A: number; B: number; C: number; D: number; S: number; O: number; mmpv: number; mmpKids: number; z: number; lock: number }
 
-export function Summary({ T, L }: { T: SumTotals; L: SumLabels }) {
+export function Summary({ T, L, U }: { T: SumTotals; L: SumLabels; U?: Record<string, string> }) {
   const cards: [string, number, string][] = [['A', T.A, L.lA], ['B', T.B, L.lB], ['C', T.C, L.lC], ['D', T.D, L.lD], ['S', T.S, L.lS], ['O', T.O, L.lO]];
   return (
     <>
       <div className="redcard"><span>{L.still}</span><b>{T.A - T.B - T.C}</b></div>
-      <div className="stats">{cards.map(([k, n, l]) => <div className="stat" key={k}><i>{k}</i><b>{n}</b><small>{l}</small></div>)}</div>
+      <div className="stats">{cards.map(([k, n, l]) => <div className="stat" key={k}><i>{k}</i><b>{n}</b><small>{l}</small>{U && U[k] ? <small className="urdu" lang="ur" dir="rtl">{U[k]}</small> : null}</div>)}</div>
       <div className="softrow">
         <span>{L.totalVacc}<small className="sub">B+C+D+S+O</small></span>
         <b>{T.B + T.C + T.D + T.S + T.O}</b>

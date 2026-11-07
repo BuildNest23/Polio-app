@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import { addSchool, canDelete, deleteLast, go, missed, removeSchool, saveNext, setNum, setOutside, setSchool, toggle, type State } from '../model';
-import type { Dict } from '../i18n';
-import { confirmSheet, Stepper, toast } from '../ui';
+import { UR, type Dict } from '../i18n';
+import { confirmSheet, Stepper, toast, Ur } from '../ui';
 
-interface P { t: Dict; s: State; set: (f: (s: State) => State) => void; finish: () => void }
+interface P { t: Dict; ur: boolean; s: State; set: (f: (s: State) => State) => void; finish: () => void }
 
-export function Entry({ t, s, set, finish }: P) {
+export function Entry({ t, ur, s, set, finish }: P) {
   const [listOpen, setListOpen] = useState(false);
   const [schoolOpen, setSchoolOpen] = useState(false);
   const h = s.houses[s.cur];
   const savedCount = s.houses.filter((x) => x.done).length;
-  const num = (k: 't' | 'v' | 'g', label: string) => (
+  const num = (k: 't' | 'v' | 'g', label: string, urText: string) => (
     <div className="card">
       <div className="row" style={{ justifyContent: 'space-between' }}>
-        <b>{label}</b>
+        <span className="lbl" style={{ display: 'flex', flexDirection: 'column' }}><b>{label}</b><Ur on={ur}>{urText}</Ur></span>
         {/* always the same height: shows the missed count next to Vaccinated, so nothing below jumps */}
         {k === 'v' && <span className="missedtag">{h.t > h.v ? <span className="badge">{t.missedWord}: {missed(h)}</span> : null}</span>}
       </div>
@@ -37,21 +37,21 @@ export function Entry({ t, s, set, finish }: P) {
       <div className="card">
         <div className="row" style={{ justifyContent: 'space-between' }}>
           <button className="housebtn" onClick={() => setListOpen(true)} aria-label={t.jump}>
-            {t.house} {s.cur + 1} <span className="caret">▾</span>
+            {t.house} {s.cur + 1} <Ur on={ur}>{UR.house}</Ur> <span className="caret">▾</span>
           </button>
           <span className="badge">{t.saved}: {savedCount}</span>
         </div>
         <div className="row">
-          <button className={'togbtn mmp grow' + (h.m ? ' on' : '')} aria-pressed={h.m} onClick={() => set((x) => toggle(x, x.cur, 'm'))}>{t.mmp}</button>
-          <button className={'togbtn lock grow' + (h.l ? ' on' : '')} aria-pressed={h.l} onClick={() => set((x) => toggle(x, x.cur, 'l'))}>{t.locked}</button>
+          <button className={'togbtn mmp grow' + (h.m ? ' on' : '')} aria-pressed={h.m} onClick={() => set((x) => toggle(x, x.cur, 'm'))}>{t.mmp}<Ur on={ur}>{UR.mmp}</Ur></button>
+          <button className={'togbtn lock grow' + (h.l ? ' on' : '')} aria-pressed={h.l} onClick={() => set((x) => toggle(x, x.cur, 'l'))}>{t.locked}<Ur on={ur}>{UR.locked}</Ur></button>
         </div>
       </div>
 
       {h.l ? <div className="notice">{t.lockedNote}</div> : (
         <>
-          {num('t', t.total)}
-          {num('v', t.vacc)}
-          {num('g', t.guest)}
+          {num('t', t.total, UR.total)}
+          {num('v', t.vacc, UR.vacc)}
+          {num('g', t.guest, UR.guest)}
         </>
       )}
 
@@ -65,13 +65,13 @@ export function Entry({ t, s, set, finish }: P) {
       </div>
 
       <div className="card">
-        <b>{t.outside}</b>
+        <span style={{ display: 'flex', flexDirection: 'column' }}><b>{t.outside}</b><Ur on={ur}>{UR.outside}</Ur></span>
         <Stepper value={s.outside} label={t.outside} editable onChange={(n) => set((x) => setOutside(x, n))} />
       </div>
 
       <div className="card">
         <button className="housebtn" style={{ fontSize: 14, justifyContent: 'space-between', width: '100%' }} onClick={() => setSchoolOpen(!schoolOpen)}>
-          <span>{t.school} ({s.school.length})</span><span className="caret">{schoolOpen ? '▴' : '▾'}</span>
+          <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}><span>{t.school} ({s.school.length})</span><Ur on={ur}>{UR.school}</Ur></span><span className="caret">{schoolOpen ? '▴' : '▾'}</span>
         </button>
         {schoolOpen && (
           <>
