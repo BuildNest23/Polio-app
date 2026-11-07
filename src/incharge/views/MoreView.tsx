@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useLang, useTheme } from '../../shared/prefs';
 import { Icon } from '../Icon';
 import type { Dict } from '../lib/i18n';
-import { S } from '../lib/state';
+import { S, idbDelete, uiConfirm } from '../lib/state';
 import { changeFile, downloadWorkbook, promptNewTemplate, setStartDate, setTeamCode, teamCodes } from '../lib/workbook';
 
 function Codes({ t, back }: { t: Dict; back: () => void }) {
@@ -20,6 +20,14 @@ function Codes({ t, back }: { t: Dict; back: () => void }) {
       </div>
     </>
   );
+}
+
+async function wipeAll(t: Dict) {
+  if (!(await uiConfirm(t.wipeAsk, { title: t.wipe, yesText: t.wipeYes, danger: true }))) return;
+  if (!(await uiConfirm(t.wipeAsk2, { title: t.wipe, yesText: t.wipeYes, danger: true }))) return;
+  for (const k of ['polioCurrentFile', 'polioOriginalFile', 'polioGen', 'polioImports']) { try { await idbDelete(k); } catch { /* ignore */ } }
+  try { localStorage.clear(); } catch { /* ignore */ }
+  location.reload();
 }
 
 export function MoreView({ t }: { t: Dict }) {
@@ -60,6 +68,7 @@ export function MoreView({ t }: { t: Dict }) {
           <span>{label}</span><Icon name="chev" size={18} />
         </button>
       ))}
+      <button className="btn danger big block" onClick={() => wipeAll(t)}>{t.wipe}</button>
     </>
   );
 }

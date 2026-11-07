@@ -9,7 +9,7 @@ export function Dialogs() {
   return (
     <>
       {dlg && (
-        <div className="overlay" onClick={(e) => { if (e.target === e.currentTarget) dlg.resolve(dlg.kind === 'prompt' ? null : false); }}>
+        <div className={'overlay' + (dlg.kind === 'prompt' ? ' top' : '')} onClick={(e) => { if (e.target === e.currentTarget) dlg.resolve(dlg.kind === 'prompt' ? null : false); }}>
           <div className="sheet" role="dialog" aria-modal="true">
             <h3>{dlg.title}</h3>
             <p>{dlg.msg}</p>
