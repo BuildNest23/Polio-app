@@ -43,7 +43,11 @@ polio-app/
    │     ├─ ChildrenView.tsx      Previous / Now / Difference
    │     └─ MoreView.tsx          language, theme, start date, team codes, backup, change file, new template
    └─ team/
-      └─ main.tsx                 (stage 1 placeholder, replaced in stage 3)
+      ├─ main.tsx, App.tsx        (4 tabs: Entry, Missed, Review, Settings)
+      ├─ model.ts                 (data, rules, totals, file builder)
+      ├─ i18n.ts, ui.tsx          (English/Urdu text, stepper, confirm, toast)
+      └─ views/                   Entry, Missed, Review, Settings
+   src/shared/teamfile.ts         (team file read + totals, used by both apps)
 ```
 
 ## Build stages
@@ -71,3 +75,7 @@ On GitHub: push to `main`, then Settings -> Pages -> Source: **GitHub Actions**.
 - Finger Markers: Final Team Wise does not add Catch Day, Final Day Wise does (kept as in your original).
 - Your file stores "Returned" and "Still missed" as `MINUS(..)`. The app reads and keeps that as is.
 - MMP in the team app is a button that turns green (not a switch).
+
+
+## Status
+Stage 1, 2 and 3 done (stage 3 = team app). Stage 4: first real build on GitHub, test with your real Excel, polish.
