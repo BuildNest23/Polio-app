@@ -81,3 +81,9 @@ html[data-theme='dark'] .team .toast.w{color:#fff}
 .team .togbtn .urdu{display:block;font-size:10px;line-height:1.6;color:inherit;opacity:.8}
 .team .cardhead{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
 .team .cardhead .lbl{display:flex;flex-direction:column}
+
+/* label on the left, Urdu on the far right, same line */
+.team .cardrow{display:flex;align-items:center;gap:6px;min-height:22px}
+.team .cardrow .mid{flex:1;display:flex;justify-content:center}
+.team .cardrow .urdu{font-size:10px;white-space:nowrap}
+.team .housebtn .mid{flex:1}.team .housebtn .urdu{font-size:10px;white-space:nowrap}

@@ -12,10 +12,11 @@ export function Entry({ t, ur, s, set, finish }: P) {
   const savedCount = s.houses.filter((x) => x.done).length;
   const num = (k: 't' | 'v' | 'g', label: string, urText: string) => (
     <div className="card">
-      <div className="row" style={{ justifyContent: 'space-between' }}>
-        <span className="lbl" style={{ display: 'flex', flexDirection: 'column' }}><b>{label}</b><Ur on={ur}>{urText}</Ur></span>
-        {/* always the same height: shows the missed count next to Vaccinated, so nothing below jumps */}
-        {k === 'v' && <span className="missedtag">{h.t > h.v ? <span className="badge">{t.missedWord}: {missed(h)}</span> : null}</span>}
+      <div className="cardrow">
+        <b>{label}</b>
+        {/* middle slot: always the same height, shows Missed next to Vaccinated so nothing below jumps */}
+        <span className="mid">{k === 'v' && h.t > h.v ? <span className="badge">{t.missedWord}: {missed(h)}</span> : null}</span>
+        <Ur on={ur}>{urText}</Ur>
       </div>
       <Stepper
         value={h[k]} label={label} editable
@@ -37,13 +38,13 @@ export function Entry({ t, ur, s, set, finish }: P) {
       <div className="card">
         <div className="row" style={{ justifyContent: 'space-between' }}>
           <button className="housebtn" onClick={() => setListOpen(true)} aria-label={t.jump}>
-            {t.house} {s.cur + 1} <Ur on={ur}>{UR.house}</Ur> <span className="caret">▾</span>
+            {t.house} {s.cur + 1} <span className="caret">▾</span>
           </button>
           <span className="badge">{t.saved}: {savedCount}</span>
         </div>
         <div className="row">
-          <button className={'togbtn mmp grow' + (h.m ? ' on' : '')} aria-pressed={h.m} onClick={() => set((x) => toggle(x, x.cur, 'm'))}>{t.mmp}<Ur on={ur}>{UR.mmp}</Ur></button>
-          <button className={'togbtn lock grow' + (h.l ? ' on' : '')} aria-pressed={h.l} onClick={() => set((x) => toggle(x, x.cur, 'l'))}>{t.locked}<Ur on={ur}>{UR.locked}</Ur></button>
+          <button className={'togbtn mmp grow' + (h.m ? ' on' : '')} aria-pressed={h.m} onClick={() => set((x) => toggle(x, x.cur, 'm'))}>{t.mmp}</button>
+          <button className={'togbtn lock grow' + (h.l ? ' on' : '')} aria-pressed={h.l} onClick={() => set((x) => toggle(x, x.cur, 'l'))}>{t.locked}</button>
         </div>
       </div>
 
@@ -65,13 +66,14 @@ export function Entry({ t, ur, s, set, finish }: P) {
       </div>
 
       <div className="card">
-        <span style={{ display: 'flex', flexDirection: 'column' }}><b>{t.outside}</b><Ur on={ur}>{UR.outside}</Ur></span>
+        <div className="cardrow"><b>{t.outside}</b><span className="mid" /><Ur on={ur}>{UR.outside}</Ur></div>
         <Stepper value={s.outside} label={t.outside} editable onChange={(n) => set((x) => setOutside(x, n))} />
       </div>
 
       <div className="card">
-        <button className="housebtn" style={{ fontSize: 14, justifyContent: 'space-between', width: '100%' }} onClick={() => setSchoolOpen(!schoolOpen)}>
-          <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}><span>{t.school} ({s.school.length})</span><Ur on={ur}>{UR.school}</Ur></span><span className="caret">{schoolOpen ? '▴' : '▾'}</span>
+        <button className="housebtn" style={{ fontSize: 14, flexDirection: 'column', alignItems: 'stretch', gap: 4, width: '100%' }} onClick={() => setSchoolOpen(!schoolOpen)}>
+          <span style={{ display: 'flex', alignItems: 'center', width: '100%', gap: 6 }}><span>{t.school} ({s.school.length})</span><span className="mid" /><Ur on={ur}>{UR.school}</Ur></span>
+          <span className="caret" style={{ alignSelf: 'flex-end' }}>{schoolOpen ? '▴' : '▾'}</span>
         </button>
         {schoolOpen && (
           <>

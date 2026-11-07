@@ -16,7 +16,7 @@ export function Missed({ t, ur, s, set }: P) {
             <b>{t.house} {i + 1}</b>
             <span className="badge">{t.missedWord}: {missed(h)}</span>
           </div>
-          <span className="muted">{t.foundRevisit} <Ur on={ur}>{UR.revisit}</Ur></span>
+          <div className="cardrow"><span className="muted">{t.foundRevisit}</span><span className="mid" /><Ur on={ur}>{UR.revisit}</Ur></div>
           <Stepper value={h.f} label={t.foundRevisit} editable={false} max={missed(h)} onChange={(n) => set((x) => setFound(x, i, n))} />
         </div>
       ))}

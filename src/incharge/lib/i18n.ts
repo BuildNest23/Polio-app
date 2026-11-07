@@ -11,7 +11,7 @@ export const I18N = {
     importTitle: 'Import team data', loadFile: 'Load file', pasteText: 'Paste text', pasteHint: 'Paste the copied team data here', add: 'Load',
     all: 'All', allDays: 'All days', remove: 'Remove', addF2a: 'Add to F2A', noImports: 'No team files loaded yet.',
     still: 'Still missed after revisit', total: 'Total', vacc: 'Total vaccinated', mmpKids: 'MMP children', mmpVacc: 'MMP vaccinated', zero: '0/0 houses', locked: 'Locked houses',
-    lA: 'Children in houses', lB: 'Vaccinated in houses', lC: 'Found on revisit', lD: 'Outside houses', lS: 'Schools', lO: 'Guest children',
+    lA: 'Children in houses', lB: 'Vaccinated', lC: 'Found on revisit', lD: 'Outside houses', lS: 'Schools', lO: 'Guest children',
     kidsTitle: 'Children count', kidsHint: 'Read only. Difference = Now − Previous.', team: 'Team', prev: 'Previous', now: 'Now', diff: 'Difference', allTeams: 'All teams',
     moreTitle: 'More', settings: 'Settings', language: 'Language', theme: 'Theme', light: 'Light', dark: 'Dark', startDate: 'Campaign start date',
     codes: 'Team codes', codesHint: 'Changing a code updates it in every section.', backup: 'Download backup copy', changeFile: 'Change Excel file', colHouse: 'House', colTotal: 'Total', colVacc: 'Vaccinated', colGuest: 'Guest', colRevisit: 'Revisit', colSum: 'Sum', colRange: 'Houses', mmpRatio: 'MMP (vaccinated / total)', wipe: 'Reset / wipe everything', wipeAsk: 'This deletes the Excel file, imports and all saved data on this phone. Download a backup first. Continue?', wipeAsk2: 'Last check: really delete everything?', wipeYes: 'Delete everything', file: 'File', back: 'Back',
