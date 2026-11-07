@@ -64,3 +64,11 @@ html[data-theme='dark'] .team .toast{color:#04230f}
 html[data-theme='dark'] .team .toast.a{color:#04230f}
 .team .toast{animation:pop .18s ease-out}
 @keyframes pop{from{transform:scale(.94);opacity:.4}to{transform:scale(1);opacity:1}}
+
+/* review: cell names + 30-house tables */
+.team .cellname{min-width:24px;height:24px;border-radius:8px;background:var(--pri-soft);color:var(--pri);font-weight:700;font-size:13px;display:inline-flex;align-items:center;justify-content:center}
+.team .rvtable{width:100%;border-collapse:collapse;font-size:11px;text-align:center}
+.team .rvtable th,.team .rvtable td{padding:2px 3px;border-bottom:1px solid var(--line);white-space:nowrap}
+.team .rvtable th{font-size:10px;color:var(--mute);font-weight:600}
+.team .rvtable tfoot th{color:var(--ink);font-size:12px;border-top:2px solid var(--line);border-bottom:0}
+.team .rvtable .mk{font-size:10px;font-weight:700;color:var(--warn-ink)}

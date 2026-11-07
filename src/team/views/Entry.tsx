@@ -50,7 +50,6 @@ export function Entry({ t, s, set, finish }: P) {
         <button className="btn primary big block" onClick={save}>{t.saveNext}</button>
       </div>
       <div className="row">
-        <button className="btn grow" onClick={finish}>{t.finish}</button>
         {canDelete(s) && (
           <button className="btn danger grow" onClick={async () => { if ((await confirmSheet(t.delAsk, t.del, t.cancel)) === 'yes') set(deleteLast); }}>{t.del}</button>
         )}
@@ -84,6 +83,8 @@ export function Entry({ t, s, set, finish }: P) {
           </>
         )}
       </div>
+
+      <button className="btn outline block" style={{ marginTop: 14 }} onClick={finish}>{t.finish}</button>
 
       {listOpen && (
         <div className="overlay" onClick={(e) => { if (e.target === e.currentTarget) setListOpen(false); }}>

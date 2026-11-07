@@ -34,7 +34,17 @@ export default function App() {
     if ((await confirmSheet(t.wipeAsk2, t.wipeYes, t.cancel)) !== 'yes') return;
     setS(initial()); setTab('entry'); toast(t.wipeDone);
   }
-  async function finish() { await askCurrent(); setTab('review'); }
+  /** Finish here: always ask about the house that is showing, unless it is already saved. */
+  async function finish() {
+    const h = s.houses[s.cur], n = s.cur + 1;
+    if (h && !h.done) {
+      const msg = (n > 1 ? t.finishAsk : t.finishAsk0).replace('{n}', String(n)).replace('{p}', String(n - 1));
+      const r = await confirmSheet(msg, t.finishAdd.replace('{n}', String(n)), n > 1 ? t.finishKeep.replace('{p}', String(n - 1)) : t.finishNone, t.cancel);
+      if (r === 'third') return;
+      if (r === 'yes') setS(saveHere(s));
+    }
+    setTab('review');
+  }
   const text = (st: State) => JSON.stringify(buildFile(cfg, st));
   const fname = `${cfg.team}_Day${cfg.day}.txt`;
 
