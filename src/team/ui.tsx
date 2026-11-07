@@ -30,7 +30,7 @@ export function Overlays() {
           </div>
         </div>
       )}
-      <div className="toasts">{ts.map((t) => <div key={t.id} className="toast">{t.msg}</div>)}</div>
+      <div className="toasts">{ts.map((t) => <div key={t.id} className={'toast ' + (t.id % 2 ? 'a' : 'b')}>{t.msg}</div>)}</div>
     </>
   );
 }
