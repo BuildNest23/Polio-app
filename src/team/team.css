@@ -87,3 +87,4 @@ html[data-theme='dark'] .team .toast.w{color:#fff}
 .team .cardrow .mid{flex:1;display:flex;justify-content:center}
 .team .cardrow .urdu{font-size:10px;white-space:nowrap}
 .team .housebtn .mid{flex:1}.team .housebtn .urdu{font-size:10px;white-space:nowrap}
+.team .cardrow .mid .badge{background:var(--red-bg);color:var(--red)}
