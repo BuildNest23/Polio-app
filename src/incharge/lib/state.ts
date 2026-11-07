@@ -1,45 +1,38 @@
-// App state (one global object + a tiny subscribe/emit store), IndexedDB helpers and the dialog/toast bus.
+// Shared mutable app state + tiny stores (no external state library).
 import { useSyncExternalStore } from 'react';
-import type { Section } from './core';
-import { buildSectionMap } from './core';
+import { buildSectionMap, type Section } from './core';
 
+/* ---------- main state ---------- */
 export const S = {
   workbook: null as any,
   fileName: '',
   originalBuffer: null as ArrayBuffer | null,
-  edited: new Set<string>(),
-  bulk: false,
+  edited: new Set<string>(),     // "row,col" of cells changed since last download
+  bulk: false,                   // bulk changes (team codes, imports, new campaign)
   mergeMap: null as Record<string, any> | null,
-  meta: { startDate: '' },
+  startDate: '',
   params: { nTeams: 5, nCatch: 1 },
-  all: [] as Section[],
-  main: [] as Section[],
-  next: [] as Section[],
-  epoch: 0, // bumps when the whole sheet is replaced (load, discard, import) so inputs re-read their value
-  rev: 0,
-  // team files kept in memory + IndexedDB
-  imports: [] as { d: any; T: any; src: string }[],
-  importDone: {} as Record<string, number>,
-  genStore: {} as Record<string, any>,
+  built: buildSectionMap(5, 1),
+  epoch: 0,                      // bumps when the sheet is replaced/bulk-edited so inputs reset
+  rev: 0,                        // bumps on every change so views re-render
+  section: 'day1',
 };
-
-export function applySectionMap(nTeams: number, nCatch: number) {
-  const b = buildSectionMap(nTeams, nCatch);
-  S.all = b.sections;
-  S.main = b.sections.filter((s) => s.group === 'main');
-  S.next = b.sections.filter((s) => s.group === 'next');
-  S.params = { nTeams, nCatch };
-}
-applySectionMap(5, 1);
-
 const subs = new Set<() => void>();
 export function emit() { S.rev++; subs.forEach((f) => f()); }
 export function useStore() {
   return useSyncExternalStore((cb) => { subs.add(cb); return () => { subs.delete(cb); }; }, () => S.rev);
 }
 export const isDirty = () => S.edited.size > 0 || S.bulk;
+export const allSections = (): Section[] => S.built.sections;
+export const mainSections = (): Section[] => S.built.sections.filter((s) => s.group === 'main');
+export const nextSections = (): Section[] => S.built.sections.filter((s) => s.group === 'next');
+export function applySectionMap(nTeams: number, nCatch: number) {
+  S.built = buildSectionMap(nTeams, nCatch);
+  S.params = { nTeams, nCatch };
+}
+export const getMerge = (r: number, c: number) => (S.mergeMap ? S.mergeMap[r + ',' + c] : null);
 
-/* ---------- IndexedDB (same db and store names as the original app) ---------- */
+/* ---------- IndexedDB (same names as the original app so old saved work is found) ---------- */
 function idbOpen(): Promise<IDBDatabase> {
   return new Promise((res, rej) => {
     const r = indexedDB.open('polioApp', 1);
@@ -56,32 +49,33 @@ export async function idbGet(k: string): Promise<any> {
   const db = await idbOpen();
   return new Promise((res, rej) => { const tx = db.transaction('files', 'readonly'); const g = tx.objectStore('files').get(k); g.onsuccess = () => res(g.result); g.onerror = () => rej(g.error); });
 }
+export async function idbDelete(k: string) {
+  const db = await idbOpen();
+  return new Promise<void>((res, rej) => { const tx = db.transaction('files', 'readwrite'); tx.objectStore('files').delete(k); tx.oncomplete = () => res(); tx.onerror = () => rej(tx.error); });
+}
 
-/* ---------- dialogs and toasts ---------- */
-export interface Dlg { kind: 'confirm' | 'prompt'; title: string; msg: string; def?: string; yes: string; no: string; danger?: boolean; resolve: (v: any) => void }
-export interface Toast { id: number; msg: string; type: string }
-const ui = { dlg: null as Dlg | null, toasts: [] as Toast[] };
-const uiSubs = new Set<() => void>();
-let uiRev = 0;
-const uiEmit = () => { uiRev++; uiSubs.forEach((f) => f()); };
-export function useUi() {
-  useSyncExternalStore((cb) => { uiSubs.add(cb); return () => { uiSubs.delete(cb); }; }, () => uiRev);
-  return ui;
+/* ---------- dialogs + toasts ---------- */
+export interface Dlg { kind: 'confirm' | 'prompt'; title: string; msg: string; yes: string; no: string; danger?: boolean; def?: string; resolve: (v: any) => void }
+let dlg: Dlg | null = null;
+const dlgSubs = new Set<() => void>();
+const setDlg = (d: Dlg | null) => { dlg = d; dlgSubs.forEach((f) => f()); };
+export function useDialog() { return useSyncExternalStore((cb) => { dlgSubs.add(cb); return () => { dlgSubs.delete(cb); }; }, () => dlg); }
+
+export function uiConfirm(msg: string, opts: { title?: string; yesText?: string; noText?: string; danger?: boolean } = {}): Promise<boolean> {
+  return new Promise((resolve) => setDlg({ kind: 'confirm', title: opts.title || 'Confirm', msg, yes: opts.yesText || 'Confirm', no: opts.noText || 'Cancel', danger: opts.danger, resolve: (v) => { setDlg(null); resolve(!!v); } }));
 }
-export function toast(msg: string, type = 'success') {
-  const t = { id: Date.now() + Math.random(), msg: String(msg || ''), type };
-  ui.toasts = [...ui.toasts, t]; uiEmit();
-  setTimeout(() => { ui.toasts = ui.toasts.filter((x) => x.id !== t.id); uiEmit(); }, 2800);
+export function uiPrompt(msg: string, def = '', opts: { title?: string; yesText?: string; noText?: string } = {}): Promise<string | null> {
+  return new Promise((resolve) => setDlg({ kind: 'prompt', title: opts.title || 'Input', msg, def, yes: opts.yesText || 'OK', no: opts.noText || 'Cancel', resolve: (v) => { setDlg(null); resolve(v); } }));
 }
-export function uiConfirm(msg: string, o: { title?: string; yesText?: string; noText?: string; danger?: boolean } = {}): Promise<boolean> {
-  return new Promise((resolve) => {
-    ui.dlg = { kind: 'confirm', title: o.title || 'Confirm', msg, yes: o.yesText || 'Confirm', no: o.noText || 'Cancel', danger: o.danger, resolve: (v) => { ui.dlg = null; uiEmit(); resolve(!!v); } };
-    uiEmit();
-  });
-}
-export function uiPrompt(msg: string, def = '', o: { title?: string; yesText?: string } = {}): Promise<string | null> {
-  return new Promise((resolve) => {
-    ui.dlg = { kind: 'prompt', title: o.title || 'Input', msg, def, yes: o.yesText || 'OK', no: 'Cancel', resolve: (v) => { ui.dlg = null; uiEmit(); resolve(v); } };
-    uiEmit();
-  });
+
+export interface ToastItem { id: number; msg: string; type: string }
+let toasts: ToastItem[] = [];
+let toastId = 1;
+const toastSubs = new Set<() => void>();
+export function useToasts() { return useSyncExternalStore((cb) => { toastSubs.add(cb); return () => { toastSubs.delete(cb); }; }, () => toasts); }
+export function toast(msg: string, type: 'success' | 'error' | 'info' = 'success') {
+  const id = toastId++;
+  toasts = [...toasts, { id, msg: String(msg || ''), type }];
+  toastSubs.forEach((f) => f());
+  setTimeout(() => { toasts = toasts.filter((t) => t.id !== id); toastSubs.forEach((f) => f()); }, 2800);
 }

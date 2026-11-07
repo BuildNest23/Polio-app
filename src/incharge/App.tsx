@@ -1,53 +1,69 @@
-import { useEffect, useState } from 'react';
-import { Table2, Users, Download, BarChart3, Menu, Sun, Moon } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { useLang, useTheme } from '../shared/prefs';
+import { Dialogs } from './Dialogs';
+import { Icon } from './Icon';
+import { I18N } from './lib/i18n';
 import { S, useStore } from './lib/state';
-import { restoreSession } from './lib/workbook';
-import { useTheme } from '../shared/prefs';
-import { useT } from './strings';
-import { Dialogs } from './views/Dialogs';
-import { Welcome } from './views/Welcome';
-import { F2AView } from './views/F2AView';
-import { TeamsView } from './views/TeamsView';
-import { ImportView } from './views/ImportView';
+import { loadGenStore, loadImports } from './lib/teamio';
+import { openFile, promptNewTemplate, restoreSaved } from './lib/workbook';
 import { ChildrenView } from './views/ChildrenView';
+import { F2AView } from './views/F2AView';
+import { ImportView } from './views/ImportView';
 import { MoreView } from './views/MoreView';
+import { TeamsView } from './views/TeamsView';
 
-type Tab = 'f2a' | 'gen' | 'imp' | 'kids' | 'more';
-const TABS: [Tab, any][] = [['f2a', Table2], ['gen', Users], ['imp', Download], ['kids', BarChart3], ['more', Menu]];
+const TABS = ['f2a', 'gen', 'imp', 'kids', 'more'] as const;
 
 export default function App() {
   useStore();
-  const t = useT();
-  const [tab, setTab] = useState<Tab>('f2a');
+  const [lang] = useLang();
   const [theme, setTheme] = useTheme();
+  const t = I18N[lang];
+  const [tab, setTab] = useState<(typeof TABS)[number]>('f2a');
   const [ready, setReady] = useState(false);
-  useEffect(() => { restoreSession().finally(() => setReady(true)); }, []);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => { (async () => { await loadGenStore(); await loadImports(); await restoreSaved(); setReady(true); })(); }, []);
+
   const hasFile = !!S.workbook;
-  let body;
-  if (!ready) body = <div className="content"><span className="muted">…</span></div>;
-  else if (tab === 'more') body = <MoreView />;
-  else if (!hasFile) body = <Welcome />;
-  else if (tab === 'f2a') body = <F2AView />;
-  else if (tab === 'gen') body = <TeamsView />;
-  else if (tab === 'imp') body = <ImportView />;
-  else body = <ChildrenView />;
   return (
     <div className="app">
       <div className="topbar">
         <div className="logo">P</div>
-        <div className="tb-title"><b>{t.title}</b><small dir="ltr">{hasFile ? S.fileName : t.noFile}</small></div>
-        <button className="iconbtn" aria-label="Theme" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
+        <div className="tb-title"><b>{t.app}</b><small dir="ltr" style={{ textAlign: 'start' }}>{hasFile ? S.fileName : t.noFile}</small></div>
+        <button className="iconbtn" aria-label="Theme" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}><Icon name={theme === 'dark' ? 'sun' : 'moon'} size={20} /></button>
       </div>
-      {body}
-      <div className="tabbar">
-        {TABS.map(([id, Icon]) => (
-          <button key={id} className={'tab' + (tab === id ? ' on' : '')} onClick={() => setTab(id)}>
-            <span className="pill"><Icon size={22} /></span><span className="lbl">{t[id]}</span>
-          </button>
-        ))}
-      </div>
+
+      {!hasFile ? (
+        <div className="content">
+          {ready ? (
+            <div className="card">
+              <h1 className="h1">{t.welcomeTitle}</h1>
+              <span className="muted">{t.welcomeText}</span>
+              <input ref={fileRef} type="file" accept=".xlsx" className="hidden-input" onChange={(e) => { const f = e.target.files?.[0]; if (f) openFile(f); e.target.value = ''; }} />
+              <button className="btn primary big block" onClick={() => fileRef.current?.click()}>{t.chooseFile}</button>
+              <button className="btn big block" onClick={promptNewTemplate}>{t.createTpl}</button>
+            </div>
+          ) : <span className="muted">…</span>}
+        </div>
+      ) : (
+        <>
+          <div className={'content' + (tab === 'f2a' ? ' fill' : '')}>
+            {tab === 'f2a' && <F2AView t={t} />}
+            {tab === 'gen' && <TeamsView t={t} />}
+            {tab === 'imp' && <ImportView t={t} />}
+            {tab === 'kids' && <ChildrenView t={t} />}
+            {tab === 'more' && <MoreView t={t} />}
+          </div>
+          <nav className="tabbar">
+            {TABS.map((id) => (
+              <button key={id} className={'tab' + (tab === id ? ' on' : '')} onClick={() => setTab(id)}>
+                <span className="pill"><Icon name={id} /></span><span className="lbl">{t[id]}</span>
+              </button>
+            ))}
+          </nav>
+        </>
+      )}
       <Dialogs />
     </div>
   );

@@ -1,0 +1,36 @@
+// App labels in English and Urdu. (Excel headings and the team file stay as in the Excel.)
+export const I18N = {
+  en: {
+    app: 'Polio Incharge', f2a: 'F2A', gen: 'Team App', imp: 'Import', kids: 'Children', more: 'More',
+    noFile: 'No file loaded', unsaved: 'cell(s) changed', clean: 'no changes yet', bulk: 'changes pending',
+    discard: 'Discard', print: 'Print', download: 'Download Excel', legEdit: 'Editable', legCalc: 'Formula', legChg: 'Changed',
+    startNew: 'Start new campaign', welcomeTitle: 'Open your F2A file', welcomeText: 'Choose your Excel file, or create a blank template.',
+    chooseFile: 'Choose Excel file', createTpl: 'Create blank template',
+    teamApps: 'Team apps', teamHint: 'Pick a day, then share each team’s app.', share: 'Share', downloadOne: 'Download', downloadAll: 'Download all teams',
+    area: 'Area', uc: 'Union council', vaccinator: 'Vaccinator', edit: 'Edit details', done: 'Done', day: 'Day',
+    importTitle: 'Import team data', loadFile: 'Load file', pasteText: 'Paste text', pasteHint: 'Paste the copied team data here', add: 'Load',
+    all: 'All', allDays: 'All days', remove: 'Remove', addF2a: 'Add to F2A', noImports: 'No team files loaded yet.',
+    still: 'Still missed after revisit', total: 'Total', vacc: 'Total vaccinated', mmpKids: 'MMP children', mmpVacc: 'MMP vaccinated', zero: '0/0 houses', locked: 'Locked houses',
+    lA: 'Children in houses', lB: 'Vaccinated in houses', lC: 'Found on revisit', lD: 'Outside houses', lS: 'Schools', lO: 'Guest children',
+    kidsTitle: 'Children count', kidsHint: 'Read only. Difference = Now − Previous.', team: 'Team', prev: 'Previous', now: 'Now', diff: 'Difference', allTeams: 'All teams',
+    moreTitle: 'More', settings: 'Settings', language: 'Language', theme: 'Theme', light: 'Light', dark: 'Dark', startDate: 'Campaign start date',
+    codes: 'Team codes', codesHint: 'Changing a code updates it in every section.', backup: 'Download backup copy', changeFile: 'Change Excel file', file: 'File', back: 'Back',
+  },
+  ur: {
+    app: 'پولیو انچارج', f2a: 'F2A', gen: 'ٹیم ایپ', imp: 'امپورٹ', kids: 'بچے', more: 'مزید',
+    noFile: 'کوئی فائل نہیں', unsaved: 'خانے تبدیل', clean: 'ابھی کوئی تبدیلی نہیں', bulk: 'تبدیلیاں باقی ہیں',
+    discard: 'منسوخ', print: 'پرنٹ', download: 'ایکسل ڈاؤن لوڈ', legEdit: 'قابل ترمیم', legCalc: 'فارمولا', legChg: 'تبدیل شدہ',
+    startNew: 'نئی مہم شروع کریں', welcomeTitle: 'اپنی F2A فائل کھولیں', welcomeText: 'اپنی ایکسل فائل منتخب کریں یا خالی ٹیمپلیٹ بنائیں۔',
+    chooseFile: 'ایکسل فائل منتخب کریں', createTpl: 'خالی ٹیمپلیٹ بنائیں',
+    teamApps: 'ٹیم ایپس', teamHint: 'دن منتخب کریں، پھر ہر ٹیم کی ایپ بھیجیں۔', share: 'شیئر', downloadOne: 'ڈاؤن لوڈ', downloadAll: 'تمام ٹیمیں ڈاؤن لوڈ کریں',
+    area: 'علاقہ', uc: 'یونین کونسل', vaccinator: 'ویکسینیٹر', edit: 'تفصیل بدلیں', done: 'مکمل', day: 'دن',
+    importTitle: 'ٹیم ڈیٹا امپورٹ', loadFile: 'فائل لوڈ کریں', pasteText: 'ٹیکسٹ پیسٹ کریں', pasteHint: 'کاپی کیا ہوا ٹیم ڈیٹا یہاں پیسٹ کریں', add: 'لوڈ',
+    all: 'سب', allDays: 'تمام دن', remove: 'ہٹائیں', addF2a: 'F2A میں شامل کریں', noImports: 'ابھی کوئی ٹیم فائل لوڈ نہیں۔',
+    still: 'نظرثانی کے بعد بھی رہ جانے والے', total: 'کل', vacc: 'کل ویکسین شدہ', mmpKids: 'MMP بچے', mmpVacc: 'MMP ویکسین شدہ', zero: '0/0 گھر', locked: 'مقفل گھر',
+    lA: 'گھروں میں بچے', lB: 'گھروں میں ویکسین شدہ', lC: 'دوبارہ دورے میں ملے', lD: 'گھروں سے باہر', lS: 'اسکول', lO: 'مہمان بچے',
+    kidsTitle: 'بچوں کی گنتی', kidsHint: 'صرف دیکھنے کے لیے۔ فرق = موجودہ − پچھلی۔', team: 'ٹیم', prev: 'پچھلی', now: 'موجودہ', diff: 'فرق', allTeams: 'تمام ٹیمیں',
+    moreTitle: 'مزید', settings: 'ترتیبات', language: 'زبان', theme: 'تھیم', light: 'روشن', dark: 'تاریک', startDate: 'مہم کی شروع کی تاریخ',
+    codes: 'ٹیم کوڈ', codesHint: 'کوڈ بدلنے سے ہر سیکشن میں بدل جاتا ہے۔', backup: 'بیک اپ کاپی ڈاؤن لوڈ کریں', changeFile: 'ایکسل فائل تبدیل کریں', file: 'فائل', back: 'واپس',
+  },
+};
+export type Dict = typeof I18N.en;

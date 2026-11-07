@@ -13,49 +13,45 @@ Both use the same look (`src/shared/theme.css`), English/Urdu and light/dark (se
 
 ```
 polio-app/
-├─ package.json              scripts and dependencies
-├─ vite.incharge.config.ts   incharge app + PWA (installable, offline)
-├─ vite.team.config.ts       team app -> ONE html file (vite-plugin-singlefile)
-├─ index.html                incharge entry
-├─ team/index.html           team entry. Holds <script id="polio-config"> that the incharge app rewrites per team/day
-├─ scripts/copy-team.mjs     copies the built team file to public/team-template.html
-├─ public/icons/             app icons
-├─ .github/workflows/deploy.yml   builds both and publishes to GitHub Pages
+├─ package.json / tsconfig.json / vite.*.config.ts / index.html / team/index.html
+├─ scripts/copy-team.mjs          copies the built team file to public/team-template.html
+├─ public/icons/                  app icons
+├─ .github/workflows/deploy.yml   builds both apps, publishes to GitHub Pages
 ├─ tests/
-│  ├─ engine.test.ts         every formula in your real F2A vs Excel's stored result (470/470 match)
-│  ├─ layout.test.ts         section row map vs your file, team-file totals, config replace
-│  └─ f2a-sample.json        your real F2A sheet, exported
+│  ├─ engine.test.ts              every formula vs Excel's stored result        (470/470 match)
+│  ├─ model.test.ts               builds all F2A sections from the real file    (9/9 ok)
+│  └─ f2a-sample.json, f2a-merges.json   your real F2A sheet, exported
 └─ src/
    ├─ shared/
-   │  ├─ theme.css           colours, buttons, cards, F2A table styles (light + dark)
-   │  └─ prefs.ts            language + theme, remembered on the device
+   │  ├─ theme.css                colours, buttons, cards, F2A table (light + dark)
+   │  └─ prefs.ts                 language + theme, remembered on the device
    ├─ incharge/
-   │  ├─ main.tsx, App.tsx   shell: top bar, 5 tabs (F2A | Team App | Import | Children | More), dialogs
-   │  ├─ strings.ts          English + Urdu text for the app
+   │  ├─ main.tsx, App.tsx        app shell, 5 bottom tabs, welcome screen
+   │  ├─ Dialogs.tsx, Icon.tsx, incharge.css
    │  ├─ lib/
-   │  │  ├─ core.ts          F2A layout: groups per section, section map, column maps, Import map
-   │  │  ├─ engine.ts        formula engine, display values, team-file totals (no UI, tested)
-   │  │  ├─ state.ts         app state store, IndexedDB, toast/confirm/prompt
-   │  │  └─ workbook.ts      load/save/autosave, cell edit, team codes, new template, start new campaign,
-   │  │                      children data, team app generator, import "Add to F2A"
+   │  │  ├─ core.ts               F2A layout: groups, section map, column maps, Import map
+   │  │  ├─ engine.ts             formula engine, display values, team-file totals
+   │  │  ├─ state.ts              shared state, IndexedDB, dialogs, toasts
+   │  │  ├─ workbook.ts           Excel load/save, autosave, editing, team codes, section model,
+   │  │  │                        print, Children data, new template, start new campaign
+   │  │  ├─ teamio.ts             Team App generator (share/download) and Import ("Add to F2A")
+   │  │  └─ i18n.ts               English / Urdu labels
    │  └─ views/
-   │     ├─ F2AView.tsx      THE FORM: all sections, merged headers, formulas, zoom, print, download
-   │     ├─ TeamsView.tsx    pick day, share/download each team's app (T-12_Day1.html)
-   │     ├─ ImportView.tsx   load team files / paste text, full review, Add to F2A, Remove
-   │     ├─ ChildrenView.tsx Previous / Now / Difference
-   │     ├─ MoreView.tsx     language, theme, start date, team codes, download, new template/campaign
-   │     ├─ Welcome.tsx      choose file / create template
-   │     └─ Dialogs.tsx      confirm / prompt / toasts
+   │     ├─ F2AView.tsx           THE FORM: section chips, table, zoom, print, download
+   │     ├─ TeamsView.tsx         Team App generator
+   │     ├─ ImportView.tsx        load team files, review, Add to F2A
+   │     ├─ ChildrenView.tsx      Previous / Now / Difference
+   │     └─ MoreView.tsx          language, theme, start date, team codes, backup, change file, new template
    └─ team/
-      └─ main.tsx            (stage 1 placeholder, replaced in stage 3)
+      └─ main.tsx                 (stage 1 placeholder, replaced in stage 3)
 ```
 
 ## Build stages
 
 1. **Done:** project, build setup, GitHub deploy, theme, F2A layout and formula engine.
-2. **Done (this zip):** workbook load/save, new template, new campaign, team codes, children, generator, import, and all incharge screens.
-3. **Next:** team app (Entry, Missed, Review, Settings, send/copy). Until then the Team App tab downloads a placeholder file.
-4. **Last:** compile and test everything with your Excel, polish.
+2. **Done (this zip):** the whole Incharge app. Not compiled yet: first real build is on GitHub or after package installs are allowed.
+3. **Next:** the team app (Entry, Missed, Review, Settings), then it is generated per team from the Incharge app.
+4. **Last:** test with your Excel, polish.
 
 ## Run it
 
