@@ -12,7 +12,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icons/favicon.svg', 'icons/apple-touch-icon.png', 'team-template.html'],
       manifest: {
-        id: './',
+        id: 'polio-incharge', // own app id (a shared './' made Chrome think it was another app on this site)
         name: 'Polio Incharge',
         short_name: 'Polio',
         description: 'Polio F2A form, team apps and team data import for the area incharge.',

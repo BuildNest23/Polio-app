@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLang, useTheme } from '../shared/prefs';
+import { usePWAInstall } from '../shared/usePWAInstall';
 import { Dialogs } from './Dialogs';
 import { Icon } from './Icon';
 import { I18N } from './lib/i18n';
@@ -18,6 +19,7 @@ export default function App() {
   useStore();
   const [lang] = useLang();
   const [theme, setTheme] = useTheme();
+  const pwa = usePWAInstall();
   const t = I18N[lang];
   const [tab, setTab] = useState<(typeof TABS)[number]>('f2a');
   const [ready, setReady] = useState(false);
@@ -31,6 +33,7 @@ export default function App() {
       <div className="topbar">
         <div className="logo">P</div>
         <div className="tb-title"><b>{t.app}</b><small dir="ltr" style={{ textAlign: 'start' }}>{hasFile ? S.fileName : t.noFile}</small></div>
+        {pwa.canInstall && <button className="btn primary" style={{ minHeight: 38, padding: '0 12px', fontSize: 13 }} onClick={pwa.install}><Icon name="imp" size={16} /> Install</button>}
         <button className="iconbtn" aria-label="Theme" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}><Icon name={theme === 'dark' ? 'sun' : 'moon'} size={20} /></button>
       </div>
 
